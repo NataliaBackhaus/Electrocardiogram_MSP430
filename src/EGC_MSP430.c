@@ -1,11 +1,9 @@
-//160015766 - Natália Backhaus Pereira
-
 #include <msp430.h> 
 
 #define FALSE 0
 #define TRUE 1
 #define THRESHOLD 2400
-// Funções
+// Funï¿½ï¿½es
 void ser_str(char *vet);
 void ser_char(char c);
 void uart1_config(void);
@@ -26,7 +24,7 @@ void delay(long limite);
 void buffer_func(int valor);
 int calc_mean(void);
 
-// Variáveis globais
+// Variï¿½veis globais
 volatile int media_x, media_y;
 int flag_thr           = 0;
 unsigned int count_diff = 0;
@@ -40,7 +38,7 @@ int indexBuffer = 0;
 int flag_buffer = 0;
 
 
-// Definição do endereço do PCF_8574
+// Definiï¿½ï¿½o do endereï¿½o do PCF_8574
 #define PCF_ADR1 0x3F
 #define PCF_ADR2 0x27
 #define PCF_ADR  PCF_ADR2
@@ -66,7 +64,7 @@ int main(void){
     char mx[5] = {0};
 
     while(TRUE){
-         ADC12CTL0 |= ADC12ENC; //Habilitar a cada conversão
+         ADC12CTL0 |= ADC12ENC; //Habilitar a cada conversï¿½o
          while( (ADC12IFG&ADC12IFG0) == 0); //IFG0 ?
          medida = ADC12MEM0;
 
@@ -131,10 +129,10 @@ void tb0_config(void){
     TB0CCTL1 = OUTMOD_6;        //Out = modo 6
     TB0CCR0 = 32767/500;        //500 Hz
     TB0CCR1 = TB0CCR0/2;        //Carga 50%
-    P4DIR |= BIT0;              //P4.0 como saída
-    P4SEL |= BIT0;              //P4.0 saída alternativa
+    P4DIR |= BIT0;              //P4.0 como saï¿½da
+    P4SEL |= BIT0;              //P4.0 saï¿½da alternativa
     PMAPKEYID = 0X02D52;        //Liberar mapeamento
-    P4MAP0 = PM_TB0CCR1A;       //TB0.1 saí por P4.0
+    P4MAP0 = PM_TB0CCR1A;       //TB0.1 saï¿½ por P4.0
 }
 
 void get_bpm(int val){
@@ -217,16 +215,16 @@ void lcd_esp(char x, char *vt){
 void lcd_inic(void){
 
     // Preparar I2C para operar
-    UCB0I2CSA = PCF_ADR;    //Endereço Escravo
+    UCB0I2CSA = PCF_ADR;    //Endereï¿½o Escravo
     UCB0CTL1 |= UCTR    |   //Mestre TX
                 UCTXSTT;    //Gerar START
     while ( (UCB0IFG & UCTXIFG) == 0);          //Esperar TXIFG=1
-    UCB0TXBUF = 0;                              //Saída PCF = 0;
+    UCB0TXBUF = 0;                              //Saï¿½da PCF = 0;
     while ( (UCB0CTL1 & UCTXSTT) == UCTXSTT);   //Esperar STT=0
     if ( (UCB0IFG & UCNACKIFG) == UCNACKIFG)    //NACK?
                 while(1);
 
-    // Começar inicialização
+    // Comeï¿½ar inicializaï¿½ï¿½o
     lcd_aux(0);     //RS=RW=0, BL=1
     delay(20000);
     lcd_aux(3);     //3
@@ -250,8 +248,8 @@ void lcd_inic(void){
     delay(50);
 }
 
-// Auxiliar inicialização do LCD (RS=RW=0)
-// *** Só serve para a inicialização ***
+// Auxiliar inicializaï¿½ï¿½o do LCD (RS=RW=0)
+// *** Sï¿½ serve para a inicializaï¿½ï¿½o ***
 void lcd_aux(char dado){
     while ( (UCB0IFG & UCTXIFG) == 0);              //Esperar TXIFG=1
     UCB0TXBUF = ((dado<<4)&0XF0) | BIT3;            //PCF7:4 = dado;
@@ -266,7 +264,7 @@ void lcd_aux(char dado){
 // Ler a porta do PCF
 int pcf_read(void){
     int dado;
-    UCB0I2CSA = PCF_ADR;                //Endereço Escravo
+    UCB0I2CSA = PCF_ADR;                //Endereï¿½o Escravo
     UCB0CTL1 &= ~UCTR;                  //Mestre RX
     UCB0CTL1 |= UCTXSTT;                //Gerar START
     while ( (UCB0CTL1 & UCTXSTT) == UCTXSTT);
@@ -279,7 +277,7 @@ int pcf_read(void){
 
 // Escrever dado na porta
 void pcf_write(char dado){
-    UCB0I2CSA = PCF_ADR;        //Endereço Escravo
+    UCB0I2CSA = PCF_ADR;        //Endereï¿½o Escravo
     UCB0CTL1 |= UCTR    |       //Mestre TX
                 UCTXSTT;        //Gerar START
     while ( (UCB0IFG & UCTXIFG) == 0)   ;          //Esperar TXIFG=1
@@ -291,10 +289,10 @@ void pcf_write(char dado){
     while ( (UCB0CTL1 & UCTXSTP) == UCTXSTP)   ;   //Esperar STOP
 }
 
-// Testar endereço I2C
+// Testar endereï¿½o I2C
 // TRUE se recebeu ACK
 int pcf_teste(char adr){
-    UCB0I2CSA = adr;                            //Endereço do PCF
+    UCB0I2CSA = adr;                            //Endereï¿½o do PCF
     UCB0CTL1 |= UCTR | UCTXSTT;                 //Gerar START, Mestre transmissor
     while ( (UCB0IFG & UCTXIFG) == 0);          //Esperar pelo START
     UCB0CTL1 |= UCTXSTP;                        //Gerar STOP
@@ -307,7 +305,7 @@ int pcf_teste(char adr){
 // P3.0 = SDA e P3.1=SCL
 void i2c_config(void){
     UCB0CTL1 |= UCSWRST;    // UCSI B0 em ressete
-    UCB0CTL0 = UCSYNC |     //Síncrono
+    UCB0CTL0 = UCSYNC |     //Sï¿½ncrono
                UCMODE_3 |   //Modo I2C
                UCMST;       //Mestre
     UCB0BRW = BR_100K;      //100 kbps
@@ -320,7 +318,7 @@ void delay(long limite){
     while (cont++ < limite) ;
 }
 
-// Buffer circular para armazenas os 10 últimos valores
+// Buffer circular para armazenas os 10 ï¿½ltimos valores
 void buffer_func(int valor){
 
     if(indexBuffer == BUFFER_SIZE || flag_buffer == 1){
