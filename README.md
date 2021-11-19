@@ -27,16 +27,14 @@ The first step of the project was to connect the AD8232 sensor to the MSP430 boa
 
 To complement the project, the number of beats per minute (BPM) was calculated. For this, a chosen threshold was used, analyzing the signal and verifying its peak value. A flag indicates each time the ECG value exceeds the chosen value and, with a sample counter, it is possible to count the BPM using the formula
 
-![\Large BPM=\frac{60}{2*\frac{N_{am}}{500}}](https://latex.codecogs.com/svg.latex?BPM=\frac{60}{2*\frac{N_{am}}{500}})
-
-
+![\Large BPM=\frac{60}{2*\frac{N_{am}}{500}}](https://latex.codecogs.com/png.image?BPM=\frac{60}{2*\frac{N_{am}}{500}})
 
 where Nam is the number of samples between one beat and another. As this value changes a lot, the final BPM value is calculated from the average of a circular buffer, which records the value of the last ten values. Finally, the BPM value is displayed on the LCD with the I2C configuration.
 
 ## Simulation and Results
 To assemble the circuit, the AD8232 sensor was connected to pins 3.3V, GND and P6.0. The LCD was connected to pins 5V, GND, P3.0 and P3.1. The assembly can be seen in the figure below.
 
-![alt text](https://github.com/NataliaBackhaus/Electrocardiogram_MSP430/blob/main/images/assembly.jpg?raw=true)
+![alt text](https://github.com/NataliaBackhaus/Electrocardiogram_MSP430/blob/main/images/assembly.jpeg?raw=true)
 
 Once this is done, the AD8232 sensor must be connected to the person to whom the measurements are to be taken. To improve the signal quality, three electrodes are used: one on the upper left side, one on the upper right side and one on the lower right side. The connection is made in this way to compare the voltage difference between the two upper electrodes and use the lower electrode as a reference. The connection is shown in figura below.
 
@@ -48,5 +46,5 @@ With the circuit running, the LCD will show the average of the last ten BPM valu
 
 The working LCD and the graphics in the serial are shown in the three figures below. In the video presenting the project, a smart watch was used at the same time to compare the beats per minute value.
 
-![alt text](https://github.com/NataliaBackhaus/Electrocardiogram_MSP430/blob/main/images/working_LCD.jpg?raw=true)
+![alt text](https://github.com/NataliaBackhaus/Electrocardiogram_MSP430/blob/main/images/working_LCD.jpeg?raw=true)
 ![alt text](https://github.com/NataliaBackhaus/Electrocardiogram_MSP430/blob/main/images/graph.png?raw=true)
